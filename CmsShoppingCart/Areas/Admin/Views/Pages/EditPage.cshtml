@@ -1,16 +1,12 @@
 ﻿@model CmsShoppingCart.Models.ViewModels.Pages.PageVM
-
 @{
     ViewBag.Title = "Edit Page";
 }
-
 <h2>Edit Page</h2>
-
 @if (TempData["SM"] != null)
 {
     <div class="alert alert-success">@TempData["SM"]</div>
 }
-
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
@@ -19,7 +15,6 @@
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.Id)
-
         <div class="form-group">
             @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -27,7 +22,6 @@
                 @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
             </div>
         </div>
-
         <div class="form-group">
             @Html.LabelFor(model => model.Slug, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -42,7 +36,6 @@
                 @Html.ValidationMessageFor(model => model.Slug, "", new { @class = "text-danger" })
             </div>
         </div>
-
         <div class="form-group">
             @Html.LabelFor(model => model.Body, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -50,7 +43,6 @@
                 @Html.ValidationMessageFor(model => model.Body, "", new { @class = "text-danger" })
             </div>
         </div>
-
         <div class="form-group">
             <label class="control-label col-md-2" for="HasSidebar">Sidebar</label>
             <div class="col-md-10">
@@ -60,7 +52,6 @@
                 </div>
             </div>
         </div>
-
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Edit Page" class="btn btn-default" />
@@ -68,7 +59,13 @@
         </div>
     </div>
 }
-
 <div>
     @Html.ActionLink("Back to Pages", "Index")
 </div>
+
+@section Scripts {
+    <script src="~/Scripts/ckeditor/ckeditor.js"></script>
+    <script>
+        CKEDITOR.replace("Body");
+    </script>
+}
