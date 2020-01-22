@@ -25,5 +25,29 @@ namespace CmsShoppingCart.Areas.Admin.Controllers
             }
             return View(categoryVMList);
         }
+
+        [HttpPost]
+        public string AddNewCategory(string catName)
+        {
+            string id;
+
+            using (Db db = new Db())
+            {
+                if (db.Categories.Any(m => m.Name == catName))                
+                    return "titletaken";
+
+                CategoryDTO dto = new CategoryDTO();
+                dto.Name = catName;
+                dto.Slug = catName.Replace(" ", "-").ToLower();
+                dto.Sorting = 100;
+
+                db.Categories.Add(dto);
+                db.SaveChanges();
+
+                id = dto.Id.ToString();
+            }
+
+            return id;
+        }
     }
 }
