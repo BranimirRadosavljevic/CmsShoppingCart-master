@@ -49,5 +49,41 @@ namespace CmsShoppingCart.Areas.Admin.Controllers
 
             return id;
         }
+
+        public void ReorderCategories(int[] id)
+        {
+            using (Db db = new Db())
+            {
+                int count = 1;
+                CategoryDTO dto;
+
+                foreach (var catId in id)
+                {
+                    dto = db.Categories.Find(catId);
+                    dto.Sorting = count;
+                    db.SaveChanges();
+                    count++;
+                }
+            }
+
+        }
+
+        public ActionResult DeleteCategory(int id)
+        {
+
+            using (Db db = new Db())
+            {
+                CategoryDTO dto = db.Categories.Find(id);
+                if (dto == null)
+                {
+                    return Content("The page does not exist.");
+                }
+
+                db.Categories.Remove(dto);
+                db.SaveChanges();
+            }
+
+            return RedirectToAction("Categories");
+        }
     }
 }
