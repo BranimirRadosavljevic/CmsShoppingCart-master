@@ -21,7 +21,7 @@ namespace CmsShoppingCart.Areas.Admin.Controllers
                                 .ToArray()
                                 .OrderBy(x => x.Sorting)
                                 .Select(x => new CategoryVM(x))
-                                .ToList(); 
+                                .ToList();
             }
             return View(categoryVMList);
         }
@@ -33,7 +33,7 @@ namespace CmsShoppingCart.Areas.Admin.Controllers
 
             using (Db db = new Db())
             {
-                if (db.Categories.Any(m => m.Name == catName))                
+                if (db.Categories.Any(m => m.Name == catName))
                     return "titletaken";
 
                 CategoryDTO dto = new CategoryDTO();
@@ -99,23 +99,75 @@ namespace CmsShoppingCart.Areas.Admin.Controllers
                 CategoryDTO dto = db.Categories.Find(id);
                 dto.Name = newCatName;
                 dto.Slug = newCatName.Replace(" ", "-").ToLower();
-                
+
                 db.SaveChanges();
             }
 
             return "ok";
         }
 
+        [HttpGet]
         public ActionResult AddProduct()
         {
             ProductVM model = new ProductVM();
 
             using (Db db = new Db())
             {
-                model.Categories = new SelectList(db.Categories.ToList(), "Id", "Name");                
+                model.Categories = new SelectList(db.Categories.ToList(), "Id", "Name");
             }
 
             return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult AddProduct(ProductVM model, HttpPostedFileBase file)
+        {
+            if (!ModelState.IsValid)
+            {
+                using (Db db = new Db())
+                {
+                    model.Categories = new SelectList(db.Categories.ToList(), "Id", "Name");
+                    return View(model);
+                }
+            }
+
+            using (Db db = new Db())
+            {
+                if (db.Products.Any(m => m.Name == model.Name))
+                {
+                    model.Categories = new SelectList(db.Categories.ToList(), "Id", "Name");
+                    ModelState.AddModelError("", "That product name is taken!");
+                    return View(model);
+                }
+            }
+
+            int id;
+
+            using (Db db = new Db())
+            {
+                ProductDTO product = new ProductDTO();
+                product.Name = model.Name;
+                product.Slug = model.Name.Replace(" ", "-").ToLower();
+                product.Description = model.Description;
+                product.Price = model.Price;
+                product.CategoryId = model.CategoryId;
+
+                CategoryDTO catDTO = db.Categories.FirstOrDefault(m => m.Id == model.CategoryId);
+                model.CategoryName = catDTO.Name;
+
+                db.Products.Add(product);
+                db.SaveChanges();
+
+                id = product.Id;
+            }
+
+            TempData["SM"] = "You have added a product!";
+
+            #region Upload Image
+
+            #endregion
+
+            return RedirectToAction("Products");
         }
     }
 }
