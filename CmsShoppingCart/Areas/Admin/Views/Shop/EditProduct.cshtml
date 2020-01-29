@@ -91,7 +91,7 @@
     <h3>There are no gallery images for this product.</h3>
 }
 
-<form action="/admin/shop/SaveGalleryImages" method="post" enctype="multipart/form-data" class="dropzone" id="dropzoneForm">
+<form action="/admin/shop/SaveGalleryImages/@Model.Id" method="post" enctype="multipart/form-data" class="dropzone" id="dropzoneForm">
     <div class="fallback">
         <input type="file" name="file" multiple />
         <input type="submit" value="Upload" />
@@ -103,8 +103,8 @@
 @foreach (var image in Model.GalleryImages)
 {
     <div style="display: inline-block">
-        <img src="/Images/Upload/Products/@Model.Id/Gallery/Thumbs/@image" />
-        @Html.ActionLink("delete", "DeleteImage", "Shop", new { @class = "deleteImage", data_name = image })
+        <img src="/Images/Uploads/Products/@Model.Id/Gallery/Thumbs/@image" />
+        @Html.ActionLink("delete", "DeleteImage", "Shop", new { @class = "deleteimage", data_name = image })
     </div>
 }
 <link href="~/Scripts/dropzone/basic.css" rel="stylesheet" />
@@ -133,10 +133,10 @@
             });
 
             Dropzone.options.dropzoneForm = {
-                acceptedFiles: "/image/*",
+                acceptedFiles: "image/*",
                 init: function () {
                     this.on("complete", function (file) {
-                        if (this.getUploadingFiles().length == 0 && this.getQueuedFiles().length == 0) {
+                        if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
                             location.reload();
                         }
                     });
