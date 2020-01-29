@@ -383,9 +383,9 @@ namespace CmsShoppingCart.Areas.Admin.Controllers
 
                 file.SaveAs(path);
 
-                WebImage img = new WebImage(file.InputStream);
-                img.Resize(200, 200);
-                img.Save(path2);
+                WebImage image = new WebImage(file.InputStream);
+                image.Resize(200, 200);
+                image.Save(path2);
 
             }
                 #endregion
