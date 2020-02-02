@@ -21,7 +21,7 @@ namespace CmsShoppingCart.Controllers
 
             using (Db db = new Db())
             {
-                if (!db.Pages.Any(m => m.Slug.Equals(page)))
+                if (!db.Pages.Any(m => m.Slug == page))
                 {
                     return RedirectToAction("Index", new { page = "" });
                 }
@@ -45,6 +45,34 @@ namespace CmsShoppingCart.Controllers
             model = new PageVM(dto);
 
             return View(model);
+        }
+
+        public ActionResult PagesMenuPartial()
+        {
+            List<PageVM> pageVMList;
+
+            using (Db db = new Db())
+            {
+                pageVMList = db.Pages.ToArray()
+                                    .OrderBy(m => m.Sorting)
+                                    .Where(m => m.Slug != "home")
+                                    .Select(m => new PageVM(m))
+                                    .ToList();
+            }
+
+            return PartialView(pageVMList);
+        }
+
+        public ActionResult SidebarPartial()
+        {
+            SidebarVM model;
+            using (Db db = new Db())
+            {
+                SidebarDTO dto = db.Sidebar.Find(1);
+                model = new SidebarVM(dto);
+            }
+
+            return PartialView(model);
         }
     }
 }
