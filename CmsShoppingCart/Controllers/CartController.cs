@@ -103,5 +103,18 @@ namespace CmsShoppingCart.Controllers
 
             return PartialView(model);
         }
+
+        public JsonResult IncrementProduct(int productId)
+        {
+            List<CartVM> cart = Session["cart"] as List<CartVM>;
+
+            using (Db db = new Db())
+            {
+                CartVM model = cart.FirstOrDefault(m => m.ProductId == productId);
+                model.Quantity++;
+                var result = new { qty = model.Quantity, price = model.Price };
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+        }
     }
 }
