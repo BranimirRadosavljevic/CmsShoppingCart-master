@@ -46,11 +46,30 @@
 
 <link href="~/Content/jquery.fancybox.css" rel="stylesheet" />
 
-@section Scripts { 
+@section Scripts {
     <script src="~/Scripts/jquery.fancybox.js"></script>
     <script>
         $(function () {
+
             $(".fancybox").fancybox();
+
+            $("a.addtocart").click(function (e) {
+                e.preventDefault();
+
+                $("span.loader").addClass("ib");
+
+                var url = "/cart/AddToCartPartial";
+                $.get(url, { id: @Model.Id}, function (data) {
+                    $(".ajaxcart").html(data);
+                }).done(function () {
+                    $("span.loader").removeClass("ib");
+                    $("span.ajaxmsg").addClass("ib");
+                    setTimeout(function () {
+                        $("span.ajaxmsg").fadeOut("fast");
+                        $("span.ajaxmsg").removeClass("ib");
+                    }, 1000);
+                });
+            });
         });
     </script>
 }
