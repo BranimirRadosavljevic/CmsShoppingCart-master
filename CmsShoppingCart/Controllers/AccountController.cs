@@ -157,5 +157,52 @@ namespace CmsShoppingCart.Controllers
 
             return View("UserProfile", model);
         }
+
+        [HttpPost]
+        [ActionName("user-profile")]
+        public ActionResult UserProfile(UserProfileVM model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("UserProfile", model);
+            }
+
+            if (string.IsNullOrWhiteSpace(model.Password))
+            {
+                if (model.Password != model.ConfirmPassword)
+                {
+                    ModelState.AddModelError("", "The passwords do not match.");
+                    return View("UserProfile", model);
+                }
+            }
+
+            using (Db db = new Db())
+            {
+                string username = User.Identity.Name;
+
+                if (db.Users.Where(m => m.Id != model.Id).Any(m => m.Username == username))
+                {
+                    ModelState.AddModelError("", "Username " + model.Username + " already exists.");
+                    model.Username = "";
+                    return View("UserProfile", model);
+                }
+
+                UserDTO dto = db.Users.Find(model.Id);
+
+                dto.FirstName = model.FirstName;
+                dto.LastName = model.LastName;
+                dto.EmailAddress = model.EmailAddress;
+                dto.Username = model.Username;
+
+                if (!string.IsNullOrWhiteSpace(model.Password))
+                    dto.Password = model.Password;
+
+                db.SaveChanges();
+            }
+
+            TempData["SM"] = "You have edited your profile";
+
+            return RedirectToAction("user-profile");
+        }
     }
 }
