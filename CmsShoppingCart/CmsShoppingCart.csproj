@@ -137,6 +137,7 @@
     <Compile Include="Areas\Admin\Controllers\DashboardController.cs" />
     <Compile Include="Areas\Admin\Controllers\PagesController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopController.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\PagesController.cs" />
     <Compile Include="Controllers\ShopController.cs" />
@@ -147,7 +148,11 @@
     <Compile Include="Models\Data\Db.cs" />
     <Compile Include="Models\Data\PageDTO.cs" />
     <Compile Include="Models\Data\ProductDTO.cs" />
+    <Compile Include="Models\Data\RoleDTO.cs" />
     <Compile Include="Models\Data\SidebarDTO.cs" />
+    <Compile Include="Models\Data\UserDTO.cs" />
+    <Compile Include="Models\Data\UserRoleDTO.cs" />
+    <Compile Include="Models\ViewModels\Account\UserVM.cs" />
     <Compile Include="Models\ViewModels\Cart\CartVM.cs" />
     <Compile Include="Models\ViewModels\Pages\PageVM.cs" />
     <Compile Include="Models\ViewModels\Pages\SidebarVM.cs" />
@@ -156,6 +161,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\CmsShoppingCartDatabase.ldf">
+      <DependentUpon>CmsShoppingCartDatabase.mdf</DependentUpon>
+    </Content>
+    <Content Include="App_Data\CmsShoppingCartDatabase.mdf" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -880,9 +889,9 @@
     <Content Include="Views\Cart\CartPartial.cshtml" />
     <Content Include="Views\Cart\Index.cshtml" />
     <Content Include="Views\Cart\AddToCartPartial.cshtml" />
+    <Content Include="Views\Account\CreateAccount.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="fileman\aspnet_client\system_web\2_0_50727\" />
     <Folder Include="fileman\aspnet_client\system_web\4_0_30319\" />
