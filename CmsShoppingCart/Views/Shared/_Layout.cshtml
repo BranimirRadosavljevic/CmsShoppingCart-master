@@ -21,6 +21,25 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     @Html.Action("PagesMenuPartial", "Pages")
+                    @if (Request.IsAuthenticated)
+                    {
+                        <li><a href="/account/logout">Logout</a></li>
+                    }
+                    else
+                    {
+                        if (ViewBag.Title == "Login")
+                        {
+                            <li class="active"><a href="/account/login">Login</a></li>
+                        }
+                        else
+                        {
+                            <li><a href="/account/login">Login</a></li>
+                        }
+                    }
+                    @if (Request.IsAuthenticated)
+                    {
+                        <li>@Html.Action("UserNavPartial", "Account", new { area = ""})</li>
+                    }
                 </ul>
                 <ul class="navbar-collapse collapse navbar-right">
                     @Html.Action("CartPartial", "Cart")
@@ -32,7 +51,7 @@
         <div class="row">
 
             <div class="col-xs-12 col-md-2">
-                @Html.Action("CategoryMenuPartial", "Shop")    
+                @Html.Action("CategoryMenuPartial", "Shop")
             </div>
 
             @if (ViewBag.Sidebar == "Yes")
@@ -53,10 +72,10 @@
             }
 
         </div>
-            <hr />
-            <footer>
-                <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-            </footer>
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+        </footer>
     </div>
 
     @Scripts.Render("~/bundles/scripts")
