@@ -3,6 +3,8 @@ using CmsShoppingCart.Models.ViewModels.Cart;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Web;
 using System.Web.Mvc;
 
@@ -148,8 +150,8 @@ namespace CmsShoppingCart.Controllers
             {
                 CartVM model = cart.FirstOrDefault(m => m.ProductId == productId);
 
-                cart.Remove(model);                               
-                
+                cart.Remove(model);
+
             }
         }
 
@@ -161,5 +163,48 @@ namespace CmsShoppingCart.Controllers
 
         }
 
+        [HttpPost]
+        public void PlaceOrder()
+        {
+            List<CartVM> cart = (List<CartVM>)Session["cart"];
+            string username = User.Identity.Name;
+            int orderId = 0;
+
+            using (Db db = new Db())
+            {
+                OrderDTO orderDTO = new OrderDTO();
+                int userId = db.Users.FirstOrDefault(m => m.Username == username).Id;
+                orderDTO.UserId = userId;
+                orderDTO.CreatedAt = DateTime.Now;
+
+                db.Orders.Add(orderDTO);
+                db.SaveChanges();
+
+                orderId = orderDTO.OrderId;
+
+                OrderDetailsDTO orderDetailsDTO = new OrderDetailsDTO();
+
+                foreach (var item in cart)
+                {
+                    orderDetailsDTO.OrderId = orderId;
+                    orderDetailsDTO.UserId = userId;
+                    orderDetailsDTO.ProductId = item.ProductId;
+                    orderDetailsDTO.Quantity = item.Quantity;
+
+                    db.OrderDetails.Add(orderDetailsDTO);
+
+                    db.SaveChanges();
+                }
+            }
+
+            var client = new SmtpClient("smtp.mailtrap.io", 2525)
+            {
+                Credentials = new NetworkCredential("faa87e59a756a7", "ff798d4ef15d56"),
+                EnableSsl = true
+            };
+            client.Send("admin@example.com", "admin@example.com", "New Order", "You have a new order. Order number " + orderId);
+
+            Session["cart"] = null;
+        }
     }
 }

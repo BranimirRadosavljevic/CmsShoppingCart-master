@@ -13,11 +13,7 @@
 }
 else
 {
-    <div class="ajaxbg">
-        <span>
-            <img src="~/Content/img/ajax-loader.gif" />
-        </span>
-    </div>
+    
     <table class="table">
         <tr>
             <th>
@@ -85,6 +81,8 @@ else
         <form class="paypalform" action="https://www.sandbox.paypal.com/us/cgi-bin/webscr" method="post">
             <input type="hidden" name="cmd" value="_cart">
             <input type="hidden" name="upload" value="1" />
+            <input type="hidden" name="charset" value="utf-8" />
+            <input type="hidden" name="currency_code" value="USD">
             <input type="hidden" name="business" value="jultranet-facilitator@gmail.com">
 
             @foreach (var item in Model)
@@ -185,6 +183,22 @@ else
 
                 $.get(url, { productId: productId }, function (data) {
                     location.reload();
+                });
+            });
+
+            $("a.placeorder").click(function (e) {
+                e.preventDefault();
+
+                var $this = $(this);
+                var url = "/cart/PlaceOrder";
+
+                $(".ajaxbg").show();
+
+                $.post(url, { }, function (data) {
+                    $(".ajaxbg span").text("Thank you. You will now be redirected to paypal.");
+                    setTimeout(function () {
+                        $('form input[name="submit"]').click();
+                    }, 2000);
                 });
             });
 
