@@ -1,4 +1,5 @@
-﻿@model IEnumerable<CmsShoppingCart.Models.ViewModels.Cart.CartVM>
+﻿@using System.Globalization 
+@model IEnumerable<CmsShoppingCart.Models.ViewModels.Cart.CartVM>
 
 @{
     ViewBag.Title = "Cart Details";
@@ -88,7 +89,7 @@ else
             @foreach (var item in Model)
             {
                 <input type="hidden" name="item_name_@count" value="@item.ProductName">
-                <input type="hidden" name="amount_@count" value="@item.Price">
+                <input type="hidden" name="amount_@count" value="@item.Price.ToString(new CultureInfo("en-us"))">
                 <input type="hidden" name="quantity_@count" value="@item.Quantity">
                 count++;
             }
