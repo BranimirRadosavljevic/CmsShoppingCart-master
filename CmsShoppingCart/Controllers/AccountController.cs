@@ -119,12 +119,14 @@ namespace CmsShoppingCart.Controllers
             return Redirect("~/account/login");
         }
 
+        [Authorize]
         public ActionResult Logout()
         {
             FormsAuthentication.SignOut();
             return RedirectToAction("login");
         }
 
+        [Authorize]
         public ActionResult UserNavPartial()
         {
             string username = User.Identity.Name;
@@ -145,6 +147,7 @@ namespace CmsShoppingCart.Controllers
 
         [HttpGet]
         [ActionName("user-profile")]
+        [Authorize]
         public ActionResult UserProfile()
         {
             string username = User.Identity.Name;
@@ -161,6 +164,7 @@ namespace CmsShoppingCart.Controllers
 
         [HttpPost]
         [ActionName("user-profile")]
+        [Authorize]
         public ActionResult UserProfile(UserProfileVM model)
         {
             if (!ModelState.IsValid)
@@ -206,6 +210,7 @@ namespace CmsShoppingCart.Controllers
             return RedirectToAction("user-profile");
         }
 
+        [Authorize(Roles = "User")]
         public ActionResult Orders()
         {
             List<OrdersForUserVM> ordersForUser = new List<OrdersForUserVM>();

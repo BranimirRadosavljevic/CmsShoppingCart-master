@@ -71,3 +71,7 @@ form.paypalform {
     left: -2000px;
 
 }
+
+.row {
+    position: relative;
+}
